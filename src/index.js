@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
-import dbConnect from './config/dbConnect.js';
-import test from '~controller/testController.js';
+import dbConnect from '~/config/dbConnect.js';
+import { test } from '~/controller/productController.js';
 
 const app = express();
-console.log(test);
+test();
 
 // Connect to database
 dbConnect();

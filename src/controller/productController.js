@@ -1,33 +1,10 @@
-const Product = require('../models/productModel');
-const User = require('../models/userModel');
-const Category = require('../models/categoryModel');
-const Supplier = require('../models/supplierModel');
-const Brand = require('../models/brandModel');
-const asyncHandler = require('express-async-handler');
-const { validateMongoDBId } = require('../utils/validateMongoDB');
-const slugify = require('slugify');
-const { cloudinaryUploadImg } = require('../utils/cloudinary');
-const Joi = require('joi');
-const { fillterQuery, sortQuery, limitQuery } = require('../utils/pageQuery');
-const mongoose = require('mongoose');
+import slugify from 'slugify';
+import asyncHandler from 'express-async-handler';
 
-const productSchema = Joi.object().keys({
-    id: Joi.string().hex().length(24).optional().allow(''),
-    name: Joi.string().min(3).max(100).required(),
-    slug: Joi.string().optional().allow(''),
-    codeProd: Joi.string().min(3).max(30).optional().allow(''),
-    category: Joi.string().min(3).max(30).required(),
-    brand: Joi.string().min(3).max(30).optional().allow(''),
-    supplier: Joi.string().min(3).max(100).required(),
-    quantity: Joi.number().default(0).required(),
-    imPrice: Joi.number().required(),
-    exPrice: Joi.number().required(),
-    description: Joi.string().optional().allow(''),
-    sold: Joi.number().optional().allow(''),
-    imgUrl: Joi.string().min(3).max(100).optional().allow(''),
-    ratings: Joi.array().optional().allow(''),
-    totalRating: Joi.number().optional().allow(''),
-});
+import { Product, User, Category, Supplier, Brand } from '~/models/index.js';
+import { validateMongoDBId, cloudinaryUploadImg } from '~/utils/index';
+import { fillterQuery, sortQuery, limitQuery } from '~/utils/pageQuery.js';
+import { productSchema } from '~/validation/productSchema';
 
 //lay danh sach san pham
 const getAllProduct = asyncHandler(async (req, res) => {
@@ -469,7 +446,12 @@ const deleteComment = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = {
+const test = () => {
+    console.log('OK nha e !!!');
+};
+
+export {
+    test,
     getComment,
     deleteComment,
     getCreateProduct,

@@ -1,14 +1,19 @@
 {
     "presets": ["@babel/preset-env"],
     "plugins": [
+        ["@babel/plugin-transform-runtime"],
         [
             "module-resolver",
             {
                 "alias": {
-                    "~": "./controller"
+                    "~": "./src",
+                    "~controller": "./src/controller",
+                    "~model": "./src/model",
+                    "~route": "./src/route",
+                    "~config": "./src/config",
+                    "~middleware": "./src/middleware"
                 }
             }
-        ],
-        ["@babel/plugin-transform-runtime"]
+        ]
     ]
 }

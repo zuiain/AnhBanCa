@@ -2,7 +2,12 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "~/*": ["controller/*"]
+            "~/*": ["src/*"],
+            "~controller/*": ["src/controller/*"],
+            "~model/*": ["src/model/*"],
+            "~route/*": ["src/route/*"],
+            "~config/*": ["src/config/*"],
+            "~middleware/*": ["src/middleware/*"]
         }
     }
 }

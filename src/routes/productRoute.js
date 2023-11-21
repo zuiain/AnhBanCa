@@ -1,46 +1,36 @@
-const express = require('express');
+import express from 'express';
+// import { isAdmin, authMiddleware, checkSuperAdmin } from '~/middlewares/authMiddleware';
+// import { uploadPhoto, productImgResize } from '~/middlewares/uploadImg';
+import { getAProduct, getAllProduct, createProduct } from '~/controller/productController';
+
 const router = express.Router();
-const { isAdmin, authMiddleware, checkSuperAdmin } = require('../middlewares/authMiddleware');
-const { uploadPhoto, productImgResize } = require('../middlewares/uploadImg');
-const {
-    createProduct,
-    getAProduct,
-    getAllProduct,
-    getUpdateProduct,
-    updateProduct,
-    deleteProduct,
-    searchProduct,
-    addToWishList,
-    rating,
-    getCreateProduct,
-    getUpdateImg,
-    updateImg,
-    getComment,
-    deleteComment,
-} = require('../controller/productController');
 
-router.get('/create', authMiddleware, isAdmin, checkSuperAdmin, getCreateProduct);
+router.get('/', getAllProduct);
 
-router.post('/create', authMiddleware, isAdmin, uploadPhoto.single('image'), productImgResize, createProduct);
+router.get('/:slug', getAProduct);
 
-router.get('/update-img/:id', authMiddleware, isAdmin, checkSuperAdmin, getUpdateImg);
+router.post('/create', createProduct);
 
-router.post('/update-img', authMiddleware, isAdmin, uploadPhoto.single('image'), productImgResize, updateImg);
+// router.get('/create', authMiddleware, isAdmin, checkSuperAdmin, getCreateProduct);
 
-router.get('/update/:id', authMiddleware, isAdmin, checkSuperAdmin, getUpdateProduct);
+// router.post('/create', authMiddleware, isAdmin, uploadPhoto.single('image'), productImgResize, createProduct);
 
-router.post('/update', authMiddleware, isAdmin, updateProduct);
+// router.get('/update-img/:id', authMiddleware, isAdmin, checkSuperAdmin, getUpdateImg);
 
-router.get('/', authMiddleware, isAdmin, checkSuperAdmin, getAllProduct);
+// router.post('/update-img', authMiddleware, isAdmin, uploadPhoto.single('image'), productImgResize, updateImg);
 
-router.get('/search', checkSuperAdmin, searchProduct);
+// router.get('/update/:id', authMiddleware, isAdmin, checkSuperAdmin, getUpdateProduct);
 
-router.put('/rating', authMiddleware, rating);
+// router.post('/update', authMiddleware, isAdmin, updateProduct);
 
-router.get('/delete/:id', authMiddleware, isAdmin, deleteProduct);
+// router.get('/search', checkSuperAdmin, searchProduct);
 
-router.get('/rating/:id', authMiddleware, isAdmin, checkSuperAdmin, getComment);
+// router.put('/rating', authMiddleware, rating);
 
-router.get('/rating/delete/:id', authMiddleware, isAdmin, deleteComment);
+// router.get('/delete/:id', authMiddleware, isAdmin, deleteProduct);
 
-module.exports = router;
+// router.get('/rating/:id', authMiddleware, isAdmin, checkSuperAdmin, getComment);
+
+// router.get('/rating/delete/:id', authMiddleware, isAdmin, deleteComment);
+
+export default router;

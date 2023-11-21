@@ -15,7 +15,7 @@ var productSchema = new mongoose.Schema(
             unique: true,
             lowercase: true,
         },
-        codeProd: {
+        code: {
             type: String,
             unique: true,
         },
@@ -39,7 +39,7 @@ var productSchema = new mongoose.Schema(
             type: Number,
             require: true,
         },
-        exPrice: {
+        price: {
             type: Number,
             require: true,
         },
@@ -53,7 +53,7 @@ var productSchema = new mongoose.Schema(
         },
         imgUrl: {
             type: String,
-            require: true,
+            // require: true,
         },
         ratings: [
             {

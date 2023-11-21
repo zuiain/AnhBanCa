@@ -1,3 +1,3 @@
-export { default as cloudinary } from '~/utils/cloudinary';
+export { default as cloudinaryUploadImg } from '~/utils/cloudinary';
 
-export { default as validateMongoDB } from '~/utils/validateMongoDB';
+export { default as validateMongoDBId } from '~/utils/validateMongoDB';

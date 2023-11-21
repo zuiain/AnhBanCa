@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Route handlers
-app.use('/products', productRoute);
+app.use('/api/products', productRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello World');

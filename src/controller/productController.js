@@ -8,6 +8,7 @@ import { productValidate } from '~/validation/';
 
 // Get information about products
 const getAllProduct = asyncHandler(async (req, res) => {
+    console.log('da chay');
     try {
         const queryStr = fillterQuery(req, res);
 
@@ -30,7 +31,6 @@ const getAllProduct = asyncHandler(async (req, res) => {
 // Get information about a product
 const getAProduct = asyncHandler(async (req, res) => {
     const { slug } = req.params;
-
     try {
         const findProduct = await Product.findOne({ slug: slug });
         res.json(findProduct);
@@ -44,7 +44,7 @@ const createProduct = asyncHandler(async (req, res) => {
     try {
         const result = productValidate(req.body);
         if (result.error) {
-            res.json(result.error);
+            res.sendStatus(403);
             return;
         }
 
@@ -72,25 +72,25 @@ const createProduct = asyncHandler(async (req, res) => {
 
 // Update product
 const updateProduct = asyncHandler(async (req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
     validateMongoDBId(id);
 
     try {
-        const result = productSchema.validate(req.body);
+        const result = productValidate(req.body);
         if (result.error) {
-            res.redirect('back');
+            res.sendStatus(403);
             return;
         }
 
-        if (req.body.tenSP) {
-            req.body.slug = slugify(req.body.tenSP);
+        if (req.body.name) {
+            req.body.slug = slugify(req.body.name);
         }
 
         const updateProduct = await Product.findByIdAndUpdate(id, req.body, {
             new: true,
         });
 
-        res.redirect('/product');
+        res.json(updateProduct);
     } catch (err) {
         throw new Error(err);
     }
@@ -100,12 +100,11 @@ const updateProduct = asyncHandler(async (req, res) => {
 const deleteProduct = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
+
     try {
         const deleteProduct = await Product.findByIdAndDelete(id);
-
-        res.redirect('/product');
+        res.sendStatus(200);
     } catch (err) {
-        res.redirect('back');
         throw new Error(err);
     }
 });
@@ -249,83 +248,40 @@ const deleteComment = asyncHandler(async (req, res) => {
     }
 });
 
-//tim san pham
+// Search products
 const searchProduct = asyncHandler(async (req, res) => {
     try {
         const { category, brand, key } = req.query;
-        let searchProduct;
-        if (key != '') {
-            if ((category != '') & (brand != '')) {
-                searchProduct = await Product.find({
-                    category: category,
-                    brand: brand,
-                    $or: [
-                        { slug: { $regex: key, $options: 'i' } },
-                        { name: { $regex: key, $options: 'i' } },
-                        { codeProd: { $regex: key, $options: 'i' } },
-                    ],
-                });
-            } else if ((category != '') & (brand == '')) {
-                searchProduct = await Product.find({
-                    category: category,
-                    $or: [
-                        { slug: { $regex: key, $options: 'i' } },
-                        { name: { $regex: key, $options: 'i' } },
-                        { codeProd: { $regex: key, $options: 'i' } },
-                    ],
-                });
-            } else if ((category == '') & (brand != '')) {
-                searchProduct = await Product.find({
-                    brand: brand,
-                    $or: [
-                        { slug: { $regex: key, $options: 'i' } },
-                        { name: { $regex: key, $options: 'i' } },
-                        { codeProd: { $regex: key, $options: 'i' } },
-                    ],
-                });
-            } else if (category == '' && brand == '') {
-                searchProduct = await Product.find({
-                    $or: [
-                        { slug: { $regex: key, $options: 'i' } },
-                        { name: { $regex: key, $options: 'i' } },
-                        { codeProd: { $regex: key, $options: 'i' } },
-                    ],
-                });
-            }
-        } else {
-            if ((category != '') & (brand != '')) {
-                searchProduct = await Product.find({
-                    category: category,
-                    brand: brand,
-                });
-            } else if ((category != '') & (brand == '')) {
-                searchProduct = await Product.find({
-                    category: category,
-                });
-            } else if ((category == '') & (brand != '')) {
-                searchProduct = await Product.find({
-                    brand: brand,
-                });
-            } else if (category == '' && brand == '') {
-                res.redirect('/product');
-                return;
-            }
+        let searchProduct, _category, _brand;
+
+        if (category) {
+            _category = { category: category };
+        }
+        if (brand) {
+            _brand = { brand: brand };
         }
 
-        console.log(brand);
-        const categories = await Category.aggregate([{ $sort: { name: 1 } }]);
-        const brands = await Brand.aggregate([{ $sort: { name: 1 } }]);
-        const suppliers = await Supplier.find();
-        res.render('admin/product/list', {
-            s_category: category,
-            s_brand: brand,
-            key,
-            suppliers,
-            brands,
-            categories,
-            products: searchProduct,
-            pages: 0,
-        });
+        if (key) {
+            searchProduct = await Product.find({
+                ..._category,
+                ..._brand,
+                $or: [
+                    { slug: { $regex: key, $options: 'i' } },
+                    { name: { $regex: key, $options: 'i' } },
+                    { codeProd: { $regex: key, $options: 'i' } },
+                ],
+            });
+        } else if (!category && !brand) {
+            res.sendStatus(403);
+            return;
+        } else {
+            searchProduct = await Product.find({
+                ..._category,
+                ..._brand,
+            });
+        }
+
+        res.json(searchProduct);
     } catch (err) {
         throw new Error(err);
     }

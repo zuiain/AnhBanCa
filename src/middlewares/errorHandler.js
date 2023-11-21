@@ -2,7 +2,6 @@
 const notFound = (req, res, next) => {
     const error = new Error(`Not found : ${req.originalUrl}`);
     res.status(404);
-    res.render('index/404.ejs');
     next(error);
 };
 
@@ -19,7 +18,6 @@ const errorHandler = (err, req, res, next) => {
 
     const messageError = err.messageObject || err.message;
 
-    // Tạo kiểu lỗi
     const error = {
         status: 'Error',
         error: messageError,

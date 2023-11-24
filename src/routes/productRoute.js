@@ -1,28 +1,22 @@
 import express from 'express';
 // import { isAdmin, authMiddleware, checkSuperAdmin } from '~/middlewares/authMiddleware';
 // import { uploadPhoto, productImgResize } from '~/middlewares/uploadImg';
-import {
-    getAProduct,
-    getAllProduct,
-    createProduct,
-    updateProduct,
-    deleteProduct,
-    searchProduct,
-} from '~/controller/productController';
+
+import { productController } from '~/controller';
 
 const router = express.Router();
 
-router.get('/', getAllProduct);
+router.get('/', productController.productList);
 
-router.get('/search', searchProduct);
+router.get('/search', productController.productSearch);
 
-router.get('/:slug', getAProduct);
+router.get('/:slug', productController.productDetail);
 
-router.post('/create', createProduct);
+router.post('/create', productController.productCreatePost);
 
-router.put('/update/:id', updateProduct);
+router.put('/update/:id', productController.productUpdatePost);
 
-router.delete('/delete/:id', deleteProduct);
+router.delete('/delete/:id', productController.productDelete);
 
 // router.get('/create', authMiddleware, isAdmin, checkSuperAdmin, getCreateProduct);
 

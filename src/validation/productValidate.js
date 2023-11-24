@@ -19,8 +19,7 @@ const productSchema = Joi.object({
 });
 
 const productValidate = (value) => {
-    const result = productSchema.validate(value);
-    return result;
+    return productSchema.validate(value);
 };
 
 export default productValidate;

@@ -1,7 +1,7 @@
 // Lỗi 404
 const notFound = (req, res, next) => {
     const error = new Error(`Not found : ${req.originalUrl}`);
-    res.status(404);
+    res.status(404).json({ status: 'Error', message: error.message });
     next(error);
 };
 
@@ -14,13 +14,13 @@ const errorHandler = (err, req, res, next) => {
     console.log('Query:', req.query);
     console.log('Error: ', err);
     console.log('Error stack: ', err.stack);
-    console.log('--------------------------------------------------------------------------------------');
-
-    const messageError = err.messageObject || err.message;
+    console.log(
+        '-------------------------------------------------------------------------------------------------------------------',
+    );
 
     const error = {
         status: 'Error',
-        error: messageError,
+        error: err.messageObject || err.message,
     };
 
     const status = err.status || 400;

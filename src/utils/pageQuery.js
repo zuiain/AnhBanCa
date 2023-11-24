@@ -1,5 +1,5 @@
 // Lọc chuỗi query
-const fillterQuery = (req) => {
+const filterQuery = (req) => {
     const queryObj = { ...req.query };
 
     const excludeFields = ['page', 'limit', 'sort', 'fields'];
@@ -10,7 +10,7 @@ const fillterQuery = (req) => {
 
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    return queryStr;
+    return JSON.parse(queryStr);
 };
 
 // Sắp xếp
@@ -57,20 +57,19 @@ const limitQuery = (req, query) => {
 };
 
 //  Phân trang
-const pageQuery = async (req, query, numberModel) => {
+const pagination = async (req, query, numberDocs, _limit = 10) => {
     const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseInt(req.query.limit) || _limit;
     const skip = (page - 1) * limit;
-
-    const pages = Math.ceil(numberModel / limit);
+    const pages = Math.ceil(numberDocs / limit);
 
     if (req.query.page) {
-        if (skip >= numberModel) throw new Error('Trang này không tồn tại');
+        if (skip >= numberDocs) throw new Error('Page is out of range');
     }
 
-    const result = await query.skip(skip).limit(limit);
+    const data = await query.skip(skip).limit(limit);
 
-    return { result, pages };
+    return { data, pages };
 };
 
-export { fillterQuery, sortQuery, limitQuery, pageQuery };
+export default { filterQuery, sortQuery, limitQuery, pagination };

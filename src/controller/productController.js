@@ -7,7 +7,7 @@ import { pageQuery } from '~/utils/';
 import { productValidate } from '~/validation/';
 
 // Get information about products
-const productList = asyncHandler(async (req, res) => {
+const getList = asyncHandler(async (req, res) => {
     try {
         const queryStr = pageQuery.filterQuery(req, res);
 
@@ -32,7 +32,7 @@ const productList = asyncHandler(async (req, res) => {
 });
 
 // Get information about a product
-const productDetail = asyncHandler(async (req, res) => {
+const getDetail = asyncHandler(async (req, res) => {
     const { slug } = req.params;
     try {
         const product = await Product.findOne({ slug: slug });
@@ -47,7 +47,7 @@ const productDetail = asyncHandler(async (req, res) => {
 });
 
 // Search products
-const productSearch = asyncHandler(async (req, res) => {
+const getSearch = asyncHandler(async (req, res) => {
     try {
         const { category, brand, q } = req.query;
         let _category, _brand, querySearch;
@@ -93,7 +93,7 @@ const productSearch = asyncHandler(async (req, res) => {
 });
 
 // Create a new product
-const productCreatePost = asyncHandler(async (req, res) => {
+const createPost = asyncHandler(async (req, res) => {
     try {
         const resultValidate = productValidate(req.body);
 
@@ -125,7 +125,7 @@ const productCreatePost = asyncHandler(async (req, res) => {
 });
 
 // Update product
-const productUpdatePost = asyncHandler(async (req, res) => {
+const updatePut = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
 
@@ -151,7 +151,7 @@ const productUpdatePost = asyncHandler(async (req, res) => {
 });
 
 // Delete product
-const productDelete = asyncHandler(async (req, res) => {
+const delDelete = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
 
@@ -303,14 +303,14 @@ const productCommentDelete = asyncHandler(async (req, res) => {
 });
 
 export default {
-    productList,
-    productDetail,
-    productCreatePost,
-    productUpdatePost,
-    productDelete,
+    getList,
+    getDetail,
+    getSearch,
+    createPost,
+    updatePut,
+    delDelete,
     productRating,
     productCommentList,
     productCommentDelete,
-    productSearch,
     productUpdateImg,
 };

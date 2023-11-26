@@ -19,22 +19,22 @@ const sortQuery = (req, query) => {
 
     if (strQuery) {
         const sortBy = strQuery.split('*');
-        let sortName = [];
-        let sortOrder = [];
+        let sortField = [];
+        let sortFieldOrder = [];
         const sortObj = {};
 
         sortBy.forEach((sortItem) => {
-            const _sortItem = sortItem.split('-');
-            sortName.push(_sortItem[0]);
-            if (_sortItem[1] === undefined || _sortItem[1] === 'asc') {
-                sortOrder.push(1);
+            const [_sortField, _sortFieldOrder] = sortItem.split('-');
+            sortField.push(_sortField);
+            if (_sortFieldOrder === undefined || _sortFieldOrder === 'asc') {
+                sortFieldOrder.push(1);
             } else {
-                sortOrder.push(-1);
+                sortFieldOrder.push(-1);
             }
         });
 
-        for (const i in sortName) {
-            sortObj[sortName[i]] = sortOrder[i];
+        for (const i in sortField) {
+            sortObj[sortField[i]] = sortFieldOrder[i];
         }
 
         query = query.sort(sortObj);

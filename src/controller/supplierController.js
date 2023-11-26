@@ -1,55 +1,54 @@
 import asyncHandler from 'express-async-handler';
 import slugify from 'slugify';
 
-import { Brand } from '~/models';
-import { validateMongoDBId } from '~/utils/';
-import { pageQuery } from '~/utils/';
-import { brandValidate } from '~/validation/';
+import { Supplier } from '~/models';
+import { validateMongoDBId, pageQuery } from '~/utils/';
+import { supplierValidate } from '~/validation/';
 
-// Get the brand list
+// Get the supplier list
 const getList = asyncHandler(async (req, res) => {
     try {
         const queryStr = pageQuery.filterQuery(req, res);
 
-        let _brands = Brand.find(queryStr);
+        let _suppliers = Supplier.find(queryStr);
 
-        _brands = pageQuery.sortQuery(req, _brands);
+        _suppliers = pageQuery.sortQuery(req, _suppliers);
 
-        _brands = pageQuery.limitQuery(req, _brands);
+        _suppliers = pageQuery.limitQuery(req, _suppliers);
 
-        const numBrands = await Brand.countDocuments();
+        const numBrands = await Supplier.countDocuments();
 
-        const brands = await pageQuery.pagination(req, _brands, numBrands);
+        const suppliers = await pageQuery.pagination(req, _suppliers, numBrands);
 
-        if (brands) {
-            res.json({ data: brands.data, pages: brands.pages });
+        if (suppliers) {
+            res.json({ data: suppliers.data, pages: suppliers.pages });
         } else {
-            throw new Error('Error while getting brand list');
+            throw new Error('Error while getting supplier list');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Get brand detail
+// Get supplier detail
 const getDetail = asyncHandler(async (req, res) => {
     try {
         const { slug } = req.params;
-        const brand = await Brand.findOne({ slug });
-        if (brand) {
-            res.json(brand);
+        const supplier = await Supplier.findOne({ slug });
+        if (supplier) {
+            res.json(supplier);
         } else {
-            throw new Error('Brand not found');
+            throw new Error('Supplier not found');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Create a new brand
+// Create a new supplier
 const createPost = asyncHandler(async (req, res) => {
     try {
-        const resultValidate = brandValidate(req.body);
+        const resultValidate = supplierValidate(req.body);
 
         if (resultValidate.error) {
             throw new Error(resultValidate.error);
@@ -57,24 +56,24 @@ const createPost = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const newBrand = await Brand.create(req.body);
+        const newBrand = await Supplier.create(req.body);
 
         if (newBrand) {
             res.json(newBrand);
         } else {
-            throw new Error('Error while creating a new brand');
+            throw new Error('Error while creating a new supplier');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Update brand
+// Update supplier
 const updatePut = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
-        const resultValidate = brandValidate(req.body);
+        const resultValidate = supplierValidate(req.body);
 
         if (resultValidate.error) {
             throw new Error(resultValidate.error);
@@ -82,37 +81,37 @@ const updatePut = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const updateBrand = await Brand.findByIdAndUpdate(id, req.body, {
+        const updateSupplier = await Supplier.findByIdAndUpdate(id, req.body, {
             new: true,
         });
 
-        if (updateBrand) {
-            res.json(updateBrand);
+        if (updateSupplier) {
+            res.json(updateSupplier);
         } else {
-            throw new Error('Cannot find ID brand');
+            throw new Error('Cannot find ID supplier');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Delete brand
+// Delete supplier
 const delDelete = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
-        const deleteBrand = await Brand.findByIdAndDelete(id);
-        if (deleteBrand) {
+        const deleteSupplier = await Supplier.findByIdAndDelete(id);
+        if (deleteSupplier) {
             res.sendStatus(200);
         } else {
-            throw new Error('Cannot find ID brand');
+            throw new Error('Cannot find ID supplier');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Search brand
+// Search supplier
 const getSearch = asyncHandler(async (req, res) => {
     const { q } = req.query;
     let querySearch;
@@ -129,14 +128,14 @@ const getSearch = asyncHandler(async (req, res) => {
             querySearch = {};
         }
 
-        const numberDocs = await Brand.countDocuments(querySearch);
-        const _searchBrand = Brand.find(querySearch);
-        const searchBrand = await pageQuery.pagination(req, _searchBrand, numberDocs);
+        const numberDocs = await Supplier.countDocuments(querySearch);
+        const _searchSupplier = Supplier.find(querySearch);
+        const searchSupplier = await pageQuery.pagination(req, _searchSupplier, numberDocs);
 
-        if (searchBrand) {
-            res.json({ data: searchBrand.data, pages: searchBrand.pages });
+        if (searchSupplier) {
+            res.json({ data: searchSupplier.data, pages: searchSupplier.pages });
         } else {
-            throw new Error('Error while searching for brand');
+            throw new Error('Error while searching for supplier');
         }
     } catch (err) {
         throw new Error(err);

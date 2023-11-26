@@ -6,17 +6,17 @@ import { productController } from '~/controller';
 
 const router = express.Router();
 
-router.get('/', productController.productList);
+router.get('/', productController.getList);
 
-router.get('/search', productController.productSearch);
+router.get('/search', productController.getSearch);
 
-router.get('/:slug', productController.productDetail);
+router.get('/:slug', productController.getDetail);
 
-router.post('/create', productController.productCreatePost);
+router.post('/create', productController.createPost);
 
-router.put('/update/:id', productController.productUpdatePost);
+router.put('/update/:id', productController.updatePut);
 
-router.delete('/delete/:id', productController.productDelete);
+router.delete('/delete/:id', productController.delDelete);
 
 // router.get('/create', authMiddleware, isAdmin, checkSuperAdmin, getCreateProduct);
 

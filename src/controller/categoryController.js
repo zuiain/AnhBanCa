@@ -7,7 +7,7 @@ import { pageQuery } from '~/utils/';
 import { categoryValidate } from '~/validation/';
 
 // Get the category list
-const categoryList = asyncHandler(async (req, res) => {
+const getList = asyncHandler(async (req, res) => {
     try {
         const queryStr = pageQuery.filterQuery(req, res);
 
@@ -32,7 +32,7 @@ const categoryList = asyncHandler(async (req, res) => {
 });
 
 // Get detail category
-const categoryDetail = asyncHandler(async (req, res) => {
+const getDetail = asyncHandler(async (req, res) => {
     try {
         const { slug } = req.params;
         const category = await Category.findOne({ slug });
@@ -47,7 +47,7 @@ const categoryDetail = asyncHandler(async (req, res) => {
 });
 
 // Create a new category
-const categoryCreatePost = asyncHandler(async (req, res) => {
+const createPost = asyncHandler(async (req, res) => {
     try {
         const resultValidate = categoryValidate(req.body);
 
@@ -70,7 +70,7 @@ const categoryCreatePost = asyncHandler(async (req, res) => {
 });
 
 // Update category
-const categoryUpdatePost = asyncHandler(async (req, res) => {
+const updatePut = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
@@ -97,7 +97,7 @@ const categoryUpdatePost = asyncHandler(async (req, res) => {
 });
 
 // Delete category
-const categoryDelete = asyncHandler(async (req, res) => {
+const delDelete = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
@@ -113,7 +113,7 @@ const categoryDelete = asyncHandler(async (req, res) => {
 });
 
 // Search category
-const categorySearch = asyncHandler(async (req, res) => {
+const getSearch = asyncHandler(async (req, res) => {
     const { q } = req.query;
     let querySearch;
     try {
@@ -144,4 +144,11 @@ const categorySearch = asyncHandler(async (req, res) => {
     }
 });
 
-export default { categoryList, categoryDetail, categoryUpdatePost, categoryCreatePost, categoryDelete, categorySearch };
+export default {
+    getList,
+    getDetail,
+    getSearch,
+    createPost,
+    updatePut,
+    delDelete,
+};

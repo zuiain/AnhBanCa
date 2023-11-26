@@ -3,16 +3,16 @@ import { categoryController } from '~/controller';
 
 const router = express.Router();
 
-router.get('/', categoryController.categoryList);
+router.get('/', categoryController.getList);
 
-router.get('/search', categoryController.categorySearch);
+router.get('/search', categoryController.getSearch);
 
-router.get('/:slug', categoryController.categoryDetail);
+router.get('/:slug', categoryController.getDetail);
 
-router.post('/create', categoryController.categoryCreatePost);
+router.post('/create', categoryController.createPost);
 
-router.put('/update/:id', categoryController.categoryUpdatePost);
+router.put('/update/:id', categoryController.updatePut);
 
-router.delete('/delete/:id', categoryController.categoryDelete);
+router.delete('/delete/:id', categoryController.delDelete);
 
 export default router;

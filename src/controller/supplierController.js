@@ -8,20 +8,20 @@ import { supplierValidate } from '~/validation/';
 // Get the supplier list
 const getList = asyncHandler(async (req, res) => {
     try {
-        const queryStr = pageQuery.filterQuery(req, res);
+        const queryString = pageQuery.filterQuery(req, res);
 
-        let _suppliers = Supplier.find(queryStr);
+        let _query = Supplier.find(queryString);
 
-        _suppliers = pageQuery.sortQuery(req, _suppliers);
+        _query = pageQuery.sortQuery(req, _query);
 
-        _suppliers = pageQuery.limitQuery(req, _suppliers);
+        _query = pageQuery.limitQuery(req, _query);
 
-        const numBrands = await Supplier.countDocuments();
+        const numDocs = await Supplier.countDocuments();
 
-        const suppliers = await pageQuery.pagination(req, _suppliers, numBrands);
+        const query = await pageQuery.pagination(req, _query, numDocs);
 
-        if (suppliers) {
-            res.json({ data: suppliers.data, pages: suppliers.pages });
+        if (query) {
+            res.json({ data: query.data, pages: query.pages });
         } else {
             throw new Error('Error while getting supplier list');
         }
@@ -34,9 +34,9 @@ const getList = asyncHandler(async (req, res) => {
 const getDetail = asyncHandler(async (req, res) => {
     try {
         const { slug } = req.params;
-        const supplier = await Supplier.findOne({ slug });
-        if (supplier) {
-            res.json(supplier);
+        const query = await Supplier.findOne({ slug });
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Supplier not found');
         }
@@ -56,10 +56,10 @@ const createPost = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const newBrand = await Supplier.create(req.body);
+        const query = await Supplier.create(req.body);
 
-        if (newBrand) {
-            res.json(newBrand);
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Error while creating a new supplier');
         }
@@ -81,12 +81,12 @@ const updatePut = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const updateSupplier = await Supplier.findByIdAndUpdate(id, req.body, {
+        const query = await Supplier.findByIdAndUpdate(id, req.body, {
             new: true,
         });
 
-        if (updateSupplier) {
-            res.json(updateSupplier);
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Cannot find ID supplier');
         }
@@ -100,8 +100,8 @@ const delDelete = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
-        const deleteSupplier = await Supplier.findByIdAndDelete(id);
-        if (deleteSupplier) {
+        const query = await Supplier.findByIdAndDelete(id);
+        if (query) {
             res.sendStatus(200);
         } else {
             throw new Error('Cannot find ID supplier');
@@ -114,10 +114,10 @@ const delDelete = asyncHandler(async (req, res) => {
 // Search supplier
 const getSearch = asyncHandler(async (req, res) => {
     const { q } = req.query;
-    let querySearch;
+    let queryString;
     try {
         if (q) {
-            querySearch = {
+            queryString = {
                 $or: [
                     { name: { $regex: q, $options: 'i' } },
                     { slug: { $regex: q, $options: 'i' } },
@@ -125,15 +125,15 @@ const getSearch = asyncHandler(async (req, res) => {
                 ],
             };
         } else {
-            querySearch = {};
+            queryString = {};
         }
 
-        const numberDocs = await Supplier.countDocuments(querySearch);
-        const _searchSupplier = Supplier.find(querySearch);
-        const searchSupplier = await pageQuery.pagination(req, _searchSupplier, numberDocs);
+        const numberDocs = await Supplier.countDocuments(queryString);
+        const _query = Supplier.find(queryString);
+        const query = await pageQuery.pagination(req, _query, numberDocs);
 
-        if (searchSupplier) {
-            res.json({ data: searchSupplier.data, pages: searchSupplier.pages });
+        if (query) {
+            res.json({ data: query.data, pages: query.pages });
         } else {
             throw new Error('Error while searching for supplier');
         }

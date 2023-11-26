@@ -9,20 +9,20 @@ import { productValidate } from '~/validation/';
 // Get information about products
 const getList = asyncHandler(async (req, res) => {
     try {
-        const queryStr = pageQuery.filterQuery(req, res);
+        const queryString = pageQuery.filterQuery(req, res);
 
-        let _products = Product.find(queryStr);
+        let _query = Product.find(queryString);
 
-        _products = pageQuery.sortQuery(req, _products);
+        _query = pageQuery.sortQuery(req, _query);
 
-        _products = pageQuery.limitQuery(req, _products);
+        _query = pageQuery.limitQuery(req, _query);
 
         const numberDocs = await Product.countDocuments();
 
-        const products = await pageQuery.pagination(req, _products, numberDocs);
+        const query = await pageQuery.pagination(req, _query, numberDocs);
 
-        if (products) {
-            res.json({ data: products.data, pages: products.pages });
+        if (query) {
+            res.json({ data: query.data, pages: query.pages });
         } else {
             throw new Error('Error while getting products list');
         }
@@ -35,9 +35,9 @@ const getList = asyncHandler(async (req, res) => {
 const getDetail = asyncHandler(async (req, res) => {
     const { slug } = req.params;
     try {
-        const product = await Product.findOne({ slug: slug });
-        if (product) {
-            res.json(product);
+        const query = await Product.findOne({ slug: slug });
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Product not found');
         }
@@ -50,18 +50,18 @@ const getDetail = asyncHandler(async (req, res) => {
 const getSearch = asyncHandler(async (req, res) => {
     try {
         const { category, brand, q } = req.query;
-        let _category, _brand, querySearch;
+        let _query, _brand, query;
 
         if (category) {
-            _category = { category: category };
+            _query = { category: category };
         }
         if (brand) {
             _brand = { brand: brand };
         }
 
         if (q) {
-            querySearch = {
-                ..._category,
+            query = {
+                ..._query,
                 ..._brand,
                 $or: [
                     { slug: { $regex: q, $options: 'i' } },
@@ -72,14 +72,14 @@ const getSearch = asyncHandler(async (req, res) => {
         } else if (!category && !brand) {
             throw new Error('Please select a category or a brand');
         } else {
-            querySearch = {
-                ..._category,
+            query = {
+                ..._query,
                 ..._brand,
             };
         }
 
-        const numberDocs = await Product.countDocuments(querySearch);
-        const _searchProducts = Product.find(querySearch);
+        const numberDocs = await Product.countDocuments(query);
+        const _searchProducts = Product.find(query);
         const searchProducts = await pageQuery.pagination(req, _searchProducts, numberDocs);
 
         if (searchProducts) {
@@ -112,10 +112,10 @@ const createPost = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const newProduct = await Product.create(req.body);
+        const query = await Product.create(req.body);
 
-        if (newProduct) {
-            res.json(newProduct);
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Error while creating a new product');
         }
@@ -137,11 +137,11 @@ const updatePut = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const updateProduct = await Product.findByIdAndUpdate(id, req.body, {
+        const query = await Product.findByIdAndUpdate(id, req.body, {
             new: true,
         });
-        if (updateProduct) {
-            res.json(updateProduct);
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Cannot find ID product');
         }
@@ -156,8 +156,8 @@ const delDelete = asyncHandler(async (req, res) => {
     validateMongoDBId(id);
 
     try {
-        const deleteProduct = await Product.findByIdAndDelete(id);
-        if (deleteProduct) {
+        const query = await Product.findByIdAndDelete(id);
+        if (query) {
             res.sendStatus(200);
         } else {
             throw new Error('Cannot find ID product');

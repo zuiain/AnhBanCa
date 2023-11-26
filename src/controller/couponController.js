@@ -1,55 +1,54 @@
 import asyncHandler from 'express-async-handler';
 import slugify from 'slugify';
 
-import { Category } from '~/models';
-import { validateMongoDBId } from '~/utils/';
-import { pageQuery } from '~/utils/';
-import { categoryValidate } from '~/validation/';
+import { Coupon } from '~/models';
+import { validateMongoDBId, pageQuery } from '~/utils/';
+import { couponValidate } from '~/validation/';
 
-// Get the category list
+// Get the coupon list
 const getList = asyncHandler(async (req, res) => {
     try {
         const queryString = pageQuery.filterQuery(req, res);
 
-        let _query = Category.find(queryString);
+        let _query = Coupon.find(queryString);
 
         _query = pageQuery.sortQuery(req, _query);
 
         _query = pageQuery.limitQuery(req, _query);
 
-        const numDocs = await Category.countDocuments();
+        const numDocs = await Coupon.countDocuments();
 
         const query = await pageQuery.pagination(req, _query, numDocs);
 
         if (query) {
             res.json({ data: query.data, pages: query.pages });
         } else {
-            throw new Error('Error while finding category list');
+            throw new Error('Error while getting coupon list');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Get detail category
+// Get coupon detail
 const getDetail = asyncHandler(async (req, res) => {
     try {
         const { slug } = req.params;
-        const query = await Category.findOne({ slug });
+        const query = await Coupon.findOne({ slug });
         if (query) {
             res.json(query);
         } else {
-            throw new Error('Category not found');
+            throw new Error('Coupon not found');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Create a new category
+// Create a new coupon
 const createPost = asyncHandler(async (req, res) => {
     try {
-        const resultValidate = categoryValidate(req.body);
+        const resultValidate = couponValidate(req.body);
 
         if (resultValidate.error) {
             throw new Error(resultValidate.error);
@@ -57,24 +56,24 @@ const createPost = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const query = await Category.create(req.body);
+        const query = await Coupon.create(req.body);
 
         if (query) {
             res.json(query);
         } else {
-            throw new Error('Error while creating a  new category');
+            throw new Error('Error while creating a new coupon');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Update category
+// Update coupon
 const updatePut = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
-        const resultValidate = categoryValidate(req.body);
+        const resultValidate = couponValidate(req.body);
 
         if (resultValidate.error) {
             throw new Error(resultValidate.error);
@@ -82,37 +81,37 @@ const updatePut = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const query = await Category.findByIdAndUpdate(id, req.body, {
+        const query = await Coupon.findByIdAndUpdate(id, req.body, {
             new: true,
         });
 
         if (query) {
             res.json(query);
         } else {
-            throw new Error('Cannot find ID category');
+            throw new Error('Cannot find ID coupon');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Delete category
+// Delete coupon
 const delDelete = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
-        const query = await Category.findByIdAndDelete(id);
+        const query = await Coupon.findByIdAndDelete(id);
         if (query) {
             res.sendStatus(200);
         } else {
-            throw new Error('Cannot find ID category');
+            throw new Error('Cannot find ID coupon');
         }
     } catch (err) {
         throw new Error(err);
     }
 });
 
-// Search category
+// Search coupon
 const getSearch = asyncHandler(async (req, res) => {
     const { q } = req.query;
     let queryString;
@@ -129,15 +128,14 @@ const getSearch = asyncHandler(async (req, res) => {
             queryString = {};
         }
 
-        const numberDocs = await Category.countDocuments(queryString);
-        console.log(numberDocs);
-        const _query = Category.find(queryString);
+        const numberDocs = await Coupon.countDocuments(queryString);
+        const _query = Coupon.find(queryString);
         const query = await pageQuery.pagination(req, _query, numberDocs);
 
         if (query) {
             res.json({ data: query.data, pages: query.pages });
         } else {
-            throw new Error('Error while searching for category');
+            throw new Error('Error while searching for coupon');
         }
     } catch (err) {
         throw new Error(err);

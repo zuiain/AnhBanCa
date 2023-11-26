@@ -9,20 +9,20 @@ import { brandValidate } from '~/validation/';
 // Get the brand list
 const getList = asyncHandler(async (req, res) => {
     try {
-        const queryStr = pageQuery.filterQuery(req, res);
+        const queryString = pageQuery.filterQuery(req, res);
 
-        let _brands = Brand.find(queryStr);
+        let _query = Brand.find(queryString);
 
-        _brands = pageQuery.sortQuery(req, _brands);
+        _query = pageQuery.sortQuery(req, _query);
 
-        _brands = pageQuery.limitQuery(req, _brands);
+        _query = pageQuery.limitQuery(req, _query);
 
-        const numBrands = await Brand.countDocuments();
+        const numDocs = await Brand.countDocuments();
 
-        const brands = await pageQuery.pagination(req, _brands, numBrands);
+        const query = await pageQuery.pagination(req, _query, numDocs);
 
-        if (brands) {
-            res.json({ data: brands.data, pages: brands.pages });
+        if (query) {
+            res.json({ data: query.data, pages: query.pages });
         } else {
             throw new Error('Error while getting brand list');
         }
@@ -35,9 +35,9 @@ const getList = asyncHandler(async (req, res) => {
 const getDetail = asyncHandler(async (req, res) => {
     try {
         const { slug } = req.params;
-        const brand = await Brand.findOne({ slug });
-        if (brand) {
-            res.json(brand);
+        const query = await Brand.findOne({ slug });
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Brand not found');
         }
@@ -57,10 +57,10 @@ const createPost = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const newBrand = await Brand.create(req.body);
+        const query = await Brand.create(req.body);
 
-        if (newBrand) {
-            res.json(newBrand);
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Error while creating a new brand');
         }
@@ -82,12 +82,12 @@ const updatePut = asyncHandler(async (req, res) => {
 
         req.body.slug = slugify(req.body.name);
 
-        const updateBrand = await Brand.findByIdAndUpdate(id, req.body, {
+        const query = await Brand.findByIdAndUpdate(id, req.body, {
             new: true,
         });
 
-        if (updateBrand) {
-            res.json(updateBrand);
+        if (query) {
+            res.json(query);
         } else {
             throw new Error('Cannot find ID brand');
         }
@@ -101,8 +101,8 @@ const delDelete = asyncHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDBId(id);
     try {
-        const deleteBrand = await Brand.findByIdAndDelete(id);
-        if (deleteBrand) {
+        const query = await Brand.findByIdAndDelete(id);
+        if (query) {
             res.sendStatus(200);
         } else {
             throw new Error('Cannot find ID brand');
@@ -115,10 +115,10 @@ const delDelete = asyncHandler(async (req, res) => {
 // Search brand
 const getSearch = asyncHandler(async (req, res) => {
     const { q } = req.query;
-    let querySearch;
+    let queryString;
     try {
         if (q) {
-            querySearch = {
+            queryString = {
                 $or: [
                     { name: { $regex: q, $options: 'i' } },
                     { slug: { $regex: q, $options: 'i' } },
@@ -126,15 +126,15 @@ const getSearch = asyncHandler(async (req, res) => {
                 ],
             };
         } else {
-            querySearch = {};
+            queryString = {};
         }
 
-        const numberDocs = await Brand.countDocuments(querySearch);
-        const _searchBrand = Brand.find(querySearch);
-        const searchBrand = await pageQuery.pagination(req, _searchBrand, numberDocs);
+        const numberDocs = await Brand.countDocuments(queryString);
+        const _query = Brand.find(queryString);
+        const query = await pageQuery.pagination(req, _query, numberDocs);
 
-        if (searchBrand) {
-            res.json({ data: searchBrand.data, pages: searchBrand.pages });
+        if (query) {
+            res.json({ data: query.data, pages: query.pages });
         } else {
             throw new Error('Error while searching for brand');
         }

@@ -72,4 +72,4 @@ const pagination = async (req, query, numberDocs, _limit = 10) => {
     return { data, pages };
 };
 
-export default { filterQuery, sortQuery, limitQuery, pagination };
+export const pageQuery = { filterQuery, sortQuery, limitQuery, pagination };

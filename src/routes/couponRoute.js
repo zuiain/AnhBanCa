@@ -1,5 +1,5 @@
 import express from 'express';
-import { couponController } from '~/controller';
+import { couponController } from '~/controllers';
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.put('/update/:id', couponController.updatePut);
 
 router.delete('/delete/:id', couponController.delDelete);
 
-export default router;
+export const couponRoute = router;

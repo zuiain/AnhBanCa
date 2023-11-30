@@ -302,7 +302,7 @@ const productCommentDelete = asyncHandler(async (req, res) => {
     }
 });
 
-export default {
+export const productController = {
     getList,
     getDetail,
     getSearch,

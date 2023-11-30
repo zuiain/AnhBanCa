@@ -6,7 +6,7 @@ import dbConnect from '~/config/dbConnect.js';
 import { errorHandler, notFound } from '~/middlewares/errorHandler';
 
 // Routes
-import { productRoute, categoryRoute, brandRoute, supplierRoute, couponRoute } from '~/routes/';
+import { productRoute, categoryRoute, brandRoute, supplierRoute, couponRoute, blogRoute } from '~/routes/';
 
 // Connect to database
 dbConnect();
@@ -24,6 +24,7 @@ app.use('/api/category', categoryRoute);
 app.use('/api/brand', brandRoute);
 app.use('/api/supplier', supplierRoute);
 app.use('/api/coupon', couponRoute);
+app.use('/api/blog', blogRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello World');

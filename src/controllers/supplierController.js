@@ -142,7 +142,7 @@ const getSearch = asyncHandler(async (req, res) => {
     }
 });
 
-export default {
+export const supplierController = {
     getList,
     getDetail,
     getSearch,

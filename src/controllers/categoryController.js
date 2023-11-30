@@ -144,7 +144,7 @@ const getSearch = asyncHandler(async (req, res) => {
     }
 });
 
-export default {
+export const categoryController = {
     getList,
     getDetail,
     getSearch,

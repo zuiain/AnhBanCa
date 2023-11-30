@@ -1,5 +1,5 @@
 import express from 'express';
-import { brandController } from '~/controller';
+import { brandController } from '~/controllers';
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.put('/update/:id', brandController.updatePut);
 
 router.delete('/delete/:id', brandController.delDelete);
 
-export default router;
+export const brandRoute = router;

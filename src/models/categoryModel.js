@@ -24,4 +24,4 @@ var categorySchema = new mongoose.Schema(
 );
 
 //Export the model
-export default mongoose.model('Category', categorySchema);
+export const Category = mongoose.model('Category', categorySchema);

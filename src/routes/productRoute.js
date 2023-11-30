@@ -2,7 +2,7 @@ import express from 'express';
 // import { isAdmin, authMiddleware, checkSuperAdmin } from '~/middlewares/authMiddleware';
 // import { uploadPhoto, productImgResize } from '~/middlewares/uploadImg';
 
-import { productController } from '~/controller';
+import { productController } from '~/controllers';
 
 const router = express.Router();
 
@@ -40,4 +40,4 @@ router.delete('/delete/:id', productController.delDelete);
 
 // router.get('/rating/delete/:id', authMiddleware, isAdmin, deleteComment);
 
-export default router;
+export const productRoute = router;

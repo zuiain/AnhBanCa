@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { supplierController } from '~/controller';
+import { supplierController } from '~/controllers';
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.put('/update/:id', supplierController.updatePut);
 
 router.delete('/delete/:id', supplierController.delDelete);
 
-export default router;
+export const supplierRoute = router;

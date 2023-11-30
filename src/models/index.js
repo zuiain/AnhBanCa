@@ -1,11 +1,13 @@
-export { default as Product } from '~/models/productModel';
+export { Product } from '~/models/productModel';
 
-export { default as Category } from '~/models/categoryModel';
+export { Category } from '~/models/categoryModel';
 
-export { default as User } from '~/models/userModel';
+export { User } from '~/models/userModel';
 
-export { default as Brand } from '~/models/brandModel';
+export { Brand } from '~/models/brandModel';
 
-export { default as Supplier } from '~/models/supplierModel';
+export { Supplier } from '~/models/supplierModel';
 
-export { default as Coupon } from '~/models/couponModel';
+export { Coupon } from '~/models/couponModel';
+
+export { Blog } from '~/models/blogModel';

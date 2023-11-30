@@ -1,9 +1,11 @@
-export { default as productRoute } from '~/routes/productRoute';
+export { productRoute } from '~/routes/productRoute';
 
-export { default as categoryRoute } from '~/routes/categoryRoute';
+export { categoryRoute } from '~/routes/categoryRoute';
 
-export { default as brandRoute } from '~/routes/brandRoute';
+export { brandRoute } from '~/routes/brandRoute';
 
-export { default as supplierRoute } from '~/routes/supplierRoute';
+export { supplierRoute } from '~/routes/supplierRoute';
 
-export { default as couponRoute } from '~/routes/couponRoute';
+export { couponRoute } from '~/routes/couponRoute';
+
+export { blogRoute } from '~/routes/blogRoute';

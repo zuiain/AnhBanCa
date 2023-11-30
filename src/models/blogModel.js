@@ -1,43 +1,38 @@
 import mongoose from 'mongoose'; // Erase if already required
 
 // Declare the Schema of the Mongo model
-var supplierSchema = new mongoose.Schema(
+var blogSchema = new mongoose.Schema(
     {
-        name: {
+        title: {
             type: String,
             required: true,
             unique: true,
-            index: true,
-            minlength: 3,
-            maxlength: 200,
         },
         slug: {
             type: String,
-            require: true,
+            required: true,
             unique: true,
             lowercase: true,
         },
-        address: {
+        category: {
+            type: String,
+            required: true,
+        },
+        imgUrl: {
             type: String,
             require: true,
-            minlength: 3,
-            maxlength: 200,
         },
-        mobile: {
+        body: {
             type: String,
-            require: true,
-            minlength: 10,
-            maxlength: 12,
+            required: true,
         },
-        email: {
+        content: {
             type: String,
-            unique: true,
+            required: true,
         },
-        fax: {
-            type: String,
-        },
-        note: {
-            type: String,
+        numViews: {
+            type: Number,
+            default: 0,
         },
     },
     {
@@ -46,4 +41,4 @@ var supplierSchema = new mongoose.Schema(
 );
 
 //Export the model
-export const Supplier = mongoose.model('Supplier', supplierSchema);
+export const Blog = mongoose.model('Blog', blogSchema);
